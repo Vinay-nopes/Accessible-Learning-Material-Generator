@@ -33,25 +33,66 @@ export async function POST(request: Request) {
     if (feature === 'simplify' && engine === 'finetuned') {
       try {
         const inferenceUrl = process.env.INFERENCE_URL || 'http://127.0.0.1:5001';
-        const pyResponse = await fetch(`${inferenceUrl}/simplify`, {
-          method: 'POST',
-          headers: {
+        
+        let responseResult = '';
+        let isSuccess = false;
+        let statusCode = 500;
+
+        if (inferenceUrl.includes('huggingface.co')) {
+          // Hugging Face Inference API Logic
+          const headers: Record<string, string> = {
             'Content-Type': 'application/json',
-            'Bypass-Tunnel-Reminder': 'true'
-          },
-          body: JSON.stringify({ text }),
-        });
+          };
+          if (process.env.HF_TOKEN) {
+            headers['Authorization'] = `Bearer ${process.env.HF_TOKEN}`;
+          }
+          
+          const hfResponse = await fetch(inferenceUrl, {
+            method: 'POST',
+            headers,
+            body: JSON.stringify({ inputs: `simplify: ${text}` }),
+          });
+          
+          statusCode = hfResponse.status;
+          const hfData = await hfResponse.json();
+          
+          if (hfResponse.ok) {
+             isSuccess = true;
+             // HF returns an array for text2text generation
+             responseResult = Array.isArray(hfData) ? hfData[0]?.generated_text : hfData?.generated_text;
+          } else {
+             responseResult = hfData.error || 'Hugging Face inference failed.';
+          }
+        } else {
+          // Local Python Server Logic
+          const pyResponse = await fetch(`${inferenceUrl}/simplify`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Bypass-Tunnel-Reminder': 'true'
+            },
+            body: JSON.stringify({ text }),
+          });
+  
+          statusCode = pyResponse.status;
+          const pyData = await pyResponse.json();
+  
+          if (pyResponse.ok) {
+            isSuccess = true;
+            responseResult = pyData.result;
+          } else {
+            responseResult = pyData.error || 'Text simplification failed. Please try again.';
+          }
+        }
 
-        const pyData = await pyResponse.json();
-
-        if (!pyResponse.ok) {
+        if (!isSuccess) {
           return NextResponse.json(
-            { error: pyData.error || 'Text simplification failed. Please try again.' },
-            { status: pyResponse.status }
+            { error: responseResult },
+            { status: statusCode }
           );
         }
 
-        return NextResponse.json({ result: pyData.result });
+        return NextResponse.json({ result: responseResult });
       } catch (pyErr) {
         console.error('Failed to communicate with local Hugging Face model:', pyErr);
         return NextResponse.json(

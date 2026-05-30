@@ -32,7 +32,8 @@ export async function POST(request: Request) {
     // Intercept local model requests
     if (feature === 'simplify' && engine === 'finetuned') {
       try {
-        const pyResponse = await fetch('http://127.0.0.1:5001/simplify', {
+        const inferenceUrl = process.env.INFERENCE_URL || 'http://127.0.0.1:5001';
+        const pyResponse = await fetch(`${inferenceUrl}/simplify`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

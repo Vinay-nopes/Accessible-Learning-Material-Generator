@@ -1,0 +1,967 @@
+@import url('https://cdn.jsdelivr.net/npm/opendyslexic@1.0.3/open-dyslexic.css');
+
+/* Core Design System for Dyslexia-Friendly Accessibility */
+
+:root {
+  /* Color Palette - Low glare, warm backgrounds, soft blues */
+  --bg-cream: #FAF7F0; /* Soft warm background to reduce visual glare */
+  --bg-card: #FFFFFF;
+  --text-main: #1E293B; /* Slate 800 (high contrast, low glare) */
+  --text-muted: #475569; /* Slate 600 */
+  --primary: #0288D1; /* Accessible blue */
+  --primary-hover: #0277BD;
+  --primary-light: #E1F5FE;
+  --border-color: #E2E8F0;
+  --success: #10B981;
+  --error: #EF4444;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+  
+  /* Layout */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --max-width: 1200px;
+}
+
+/* Dyslexia-Optimized Dark Mode (Soft deep slate-based charcoal to prevent visual halo/stress) */
+.dark-theme {
+  --bg-cream: #121824;    /* Deep warm charcoal */
+  --bg-card: #1E293B;     /* Slate blue card base */
+  --text-main: #F8FAFC;    /* Soft white-smoke */
+  --text-muted: #94A3B8;   /* Muted light slate */
+  --primary: #38BDF8;      /* Soft sky blue (readable in dark mode) */
+  --primary-hover: #0EA5E9;
+  --primary-light: #0F172A; /* Deep indigo/black block background */
+  --border-color: #334155;  /* Deep border slate */
+  --success: #34D399;      /* Accessible emerald */
+  --error: #F87171;        /* Accessible red */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.4);
+}
+
+/* Base resets */
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html, body {
+  width: 100%;
+  min-height: 100%;
+  background-color: var(--bg-cream);
+  color: var(--text-main);
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Typography styles based on font selection */
+/* The layout.tsx will apply .font-lexend class for dyslexia mode, otherwise uses .font-outfit */
+
+.font-outfit {
+  font-family: var(--font-outfit), system-ui, sans-serif;
+  letter-spacing: 0.01em;
+}
+
+.font-lexend {
+  font-family: 'OpenDyslexic', var(--font-lexend), system-ui, sans-serif;
+  letter-spacing: 0.05em; /* Increased spacing to prevent letters from blending */
+  word-spacing: 0.1em;
+}
+
+/* Spacing and accessibility adjustments */
+.accessible-content {
+  line-height: 1.8 !important; /* Extremely readable line-height */
+  font-size: 1.15rem !important; /* Slightly larger text */
+}
+
+.accessible-content p {
+  margin-bottom: 1.5rem;
+}
+
+/* Main Layout Components */
+.app-container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  width: 100%;
+  flex: 1;
+}
+
+/* Accessibility Control Panel */
+.accessibility-bar {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.control-btn {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.control-btn:hover {
+  background: var(--primary-light);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.control-btn.active {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+/* Cards & Layout */
+.card {
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  padding: 2rem;
+  box-shadow: var(--shadow-md);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-lg);
+}
+
+/* Header */
+.header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.header h1 {
+  font-size: 2.5rem;
+  color: var(--primary);
+  margin-bottom: 0.5rem;
+  font-weight: 800;
+}
+
+.header p {
+  font-size: 1.1rem;
+  color: var(--text-muted);
+}
+
+/* Main Grid Layout */
+.grid-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+@media (min-width: 1024px) {
+  .grid-layout {
+    grid-template-columns: 1.2fr 1fr;
+  }
+}
+
+/* Form Elements */
+.textarea-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.label-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.custom-textarea {
+  width: 100%;
+  min-height: 250px;
+  max-height: 500px;
+  padding: 1.25rem;
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: 1.05rem;
+  line-height: 1.6;
+  resize: vertical;
+  outline: none;
+  background: var(--bg-card);
+  color: var(--text-main);
+  transition: border-color 0.2s ease;
+}
+
+.custom-textarea:focus {
+  border-color: var(--primary);
+}
+
+.word-count {
+  align-self: flex-end;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+/* Feature Selector Grid */
+.feature-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .feature-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.feature-option {
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: var(--bg-card);
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.feature-option:hover {
+  border-color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.feature-option.selected {
+  border-color: var(--primary);
+  background-color: var(--primary-light);
+}
+
+.feature-title {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--text-main);
+}
+
+.feature-option.selected .feature-title {
+  color: var(--primary-hover);
+}
+
+.feature-desc {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+/* Buttons */
+.btn-generate {
+  width: 100%;
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.btn-generate:hover:not(:disabled) {
+  background: var(--primary-hover);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-generate:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.btn-generate:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Spinner */
+.spinner-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  padding: 3rem 1rem;
+  text-align: center;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid var(--primary-light);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 1s infinite linear;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spinner-text {
+  font-weight: 600;
+  color: var(--primary-hover);
+}
+
+/* Output Card styles */
+.output-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.output-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.output-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.action-btn {
+  background: none;
+  border: 1px solid var(--border-color);
+  padding: 0.4rem 0.8rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: all 0.2s ease;
+}
+
+.action-btn:hover {
+  background: var(--primary-light);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+/* Error message styles */
+.error-box {
+  background-color: #FEF2F2;
+  border: 1px solid #FCA5A5;
+  color: var(--error);
+  padding: 1rem;
+  border-radius: var(--radius-md);
+  margin-bottom: 1.5rem;
+  font-weight: 500;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Quiz styling */
+.quiz-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.quiz-question-card {
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  background: var(--bg-cream);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.quiz-question-text {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--text-main);
+  line-height: 1.4;
+}
+
+.quiz-options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.quiz-option-btn {
+  width: 100%;
+  text-align: left;
+  padding: 0.85rem 1.25rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  background: var(--bg-card);
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1.4;
+  color: var(--text-main);
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.quiz-option-btn:hover:not(:disabled) {
+  border-color: var(--primary);
+  background-color: var(--primary-light);
+}
+
+.quiz-option-btn:disabled {
+  cursor: not-allowed;
+}
+
+/* Quiz evaluation states */
+.quiz-option-btn.selected-wrong {
+  background-color: #FEF2F2;
+  border-color: var(--error);
+  color: var(--error);
+  font-weight: 600;
+}
+
+.quiz-option-btn.correct {
+  background-color: #ECFDF5;
+  border-color: var(--success);
+  color: var(--success);
+  font-weight: 600;
+}
+
+.quiz-score-banner {
+  background: var(--primary-light);
+  border: 2px solid var(--primary);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.quiz-score-title {
+  font-weight: 800;
+  font-size: 1.5rem;
+  color: var(--primary-hover);
+}
+
+.quiz-score-desc {
+  font-size: 1.1rem;
+  color: var(--text-main);
+}
+
+.quiz-badge {
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  margin-left: 0.5rem;
+}
+
+.badge-wrong {
+  background-color: #FEE2E2;
+  color: var(--error);
+}
+
+.badge-correct {
+  background-color: #D1FAE5;
+  color: var(--success);
+}
+
+/* Instructions card on results side when empty */
+.empty-result-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 400px;
+  border: 2px dashed var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 2rem;
+  text-align: center;
+  color: var(--text-muted);
+  gap: 1.25rem;
+}
+
+.empty-result-icon {
+  font-size: 3.5rem;
+  color: var(--border-color);
+}
+
+/* Markdown typography defaults inside OutputCard */
+.output-rendered-content ul, 
+.output-rendered-content ol {
+  padding-left: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.output-rendered-content li {
+  margin-bottom: 0.5rem;
+}
+
+.output-rendered-content p {
+  margin-bottom: 1rem;
+}
+
+.output-rendered-content h1, 
+.output-rendered-content h2, 
+.output-rendered-content h3 {
+  color: var(--primary);
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+  font-weight: 700;
+}
+
+.output-rendered-content strong {
+  color: #0F172A; /* Highlighted text color */
+  background-color: #FEF9C3; /* Soft yellow highlight background for readability */
+  padding: 0 0.2rem;
+  border-radius: 2px;
+}
+
+/* Document Upload Drag-and-Drop Area */
+.upload-container {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.5rem;
+}
+
+.upload-dropzone {
+  border: 2px dashed var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  background: var(--bg-card);
+  text-align: center;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  position: relative;
+}
+
+.upload-dropzone.drag-active {
+  border-color: var(--primary);
+  background-color: var(--primary-light);
+  transform: scale(1.01);
+}
+
+.upload-dropzone.uploading {
+  border-style: solid;
+  border-color: var(--primary-light);
+  cursor: not-allowed;
+}
+
+.upload-file-input {
+  display: none;
+}
+
+.upload-prompt-content, .upload-loader-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.upload-icon {
+  font-size: 2.25rem;
+}
+
+.upload-main-text {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-main);
+  line-height: 1.4;
+}
+
+.upload-select-btn {
+  background: none;
+  border: none;
+  color: var(--primary);
+  text-decoration: underline;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0;
+  font-size: inherit;
+}
+
+.upload-select-btn:hover {
+  color: var(--primary-hover);
+}
+
+.upload-sub-text {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* Reusable smooth transitions for components */
+.card, .custom-textarea, .feature-option, .upload-dropzone, .control-btn, .action-btn {
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease, transform 0.15s ease-out, box-shadow 0.25s ease;
+}
+
+/* Dyslexia Dark Theme Contrast Overrides */
+.dark-theme .output-rendered-content strong {
+  color: #121824 !important; /* High-contrast readable charcoal */
+  background-color: #FBBF24 !important; /* Muted warm amber highlight */
+}
+
+.dark-theme .quiz-option-btn.selected-wrong {
+  background-color: #451A1A !important;
+  border-color: #F87171 !important;
+  color: #F87171 !important;
+}
+
+.dark-theme .quiz-option-btn.correct {
+  background-color: #064E3B !important;
+  border-color: #34D399 !important;
+  color: #34D399 !important;
+}
+
+.dark-theme .error-box {
+  background-color: #451A1A !important;
+  border-color: #EF4444 !important;
+  color: #F87171 !important;
+}
+
+.dark-theme .badge-wrong {
+  background-color: #7F1D1D !important;
+  color: #FCA5A5 !important;
+}
+
+.dark-theme .badge-correct {
+  background-color: #064E3B !important;
+  color: #A7F3D0 !important;
+}
+
+.dark-theme .quiz-score-banner {
+  background-color: #0F172A !important;
+  border-color: #38BDF8 !important;
+}
+
+.dark-theme .control-btn:hover {
+  background: var(--primary-light);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.dark-theme .control-btn.active {
+  background: var(--primary);
+  color: #0F172A; /* Dark text on bright primary control button in dark mode */
+  border-color: var(--primary);
+}
+
+.dark-theme .empty-result-placeholder {
+  border-color: var(--border-color);
+  color: var(--text-muted);
+}
+
+/* Ambient 3D/Glassmorphic Mesh Gradient Blobs */
+.mesh-gradient-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
+  filter: blur(120px);
+  opacity: 0.6;
+  transition: opacity 0.5s ease;
+}
+
+.dark-theme .mesh-gradient-container {
+  opacity: 0.22;
+}
+
+.mesh-blob {
+  position: absolute;
+  border-radius: 50%;
+  animation: float-mesh 25s infinite ease-in-out;
+  will-change: transform;
+}
+
+.blob-1 {
+  top: -10%;
+  left: -10%;
+  width: 50vw;
+  height: 50vw;
+  background: radial-gradient(circle, rgba(14, 165, 233, 0.4) 0%, rgba(255,255,255,0) 70%);
+}
+
+.dark-theme .blob-1 {
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.25) 0%, rgba(0,0,0,0) 70%);
+}
+
+.blob-2 {
+  bottom: -15%;
+  right: -10%;
+  width: 55vw;
+  height: 55vw;
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.3) 0%, rgba(255,255,255,0) 70%);
+  animation-delay: -5s;
+}
+
+.dark-theme .blob-2 {
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.18) 0%, rgba(0,0,0,0) 70%);
+}
+
+.blob-3 {
+  top: 35%;
+  left: 45%;
+  width: 40vw;
+  height: 40vw;
+  background: radial-gradient(circle, rgba(236, 72, 153, 0.22) 0%, rgba(255,255,255,0) 70%);
+  animation-delay: -10s;
+}
+
+.dark-theme .blob-3 {
+  background: radial-gradient(circle, rgba(236, 72, 153, 0.12) 0%, rgba(0,0,0,0) 70%);
+}
+
+@keyframes float-mesh {
+  0% {
+    transform: translate(0px, 0px) scale(1) rotate(0deg);
+  }
+  33% {
+    transform: translate(60px, -50px) scale(1.1) rotate(120deg);
+  }
+  66% {
+    transform: translate(-40px, 30px) scale(0.95) rotate(240deg);
+  }
+  100% {
+    transform: translate(0px, 0px) scale(1) rotate(360deg);
+  }
+}
+
+/* ============================================================
+   MOBILE RESPONSIVENESS
+   All rules below use max-width only — desktop is untouched.
+   Breakpoints:
+     ≤ 768px  → tablet / large phones
+     ≤ 480px  → small phones (iPhone SE, Galaxy S20 etc.)
+   ============================================================ */
+
+/* ---- Tablet & below (≤ 768px) ---- */
+@media (max-width: 768px) {
+
+  /* Container padding */
+  .app-container {
+    padding: 1.25rem 0.85rem;
+  }
+
+  /* Header text scaling */
+  .header {
+    margin-bottom: 1.5rem;
+  }
+  .header h1 {
+    font-size: 1.75rem;
+    line-height: 1.2;
+  }
+  .header p {
+    font-size: 0.95rem;
+  }
+
+  /* Accessibility toolbar — wrap naturally, shrink buttons */
+  .accessibility-bar {
+    justify-content: flex-start;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+  .control-btn {
+    font-size: 0.78rem;
+    padding: 0.4rem 0.65rem;
+    gap: 0.3rem;
+  }
+
+  /* Grid stays single column — grid-template-columns: 1fr already set */
+  .grid-layout {
+    gap: 1.25rem;
+  }
+
+  /* Cards */
+  .card {
+    padding: 1.25rem;
+  }
+
+  /* Textarea shorter on mobile */
+  .custom-textarea {
+    min-height: 160px;
+    font-size: 0.95rem;
+  }
+
+  /* Feature grid — 2 columns already at ≥640 px, keep it 1 col on mobile */
+  .feature-option {
+    padding: 1rem;
+  }
+  .feature-title {
+    font-size: 1rem;
+  }
+
+  /* Generate button */
+  .btn-generate {
+    font-size: 1rem;
+    padding: 0.85rem 1.25rem;
+  }
+
+  /* Output header — stack title and actions vertically on small screens */
+  .output-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+  .output-actions {
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  .action-btn {
+    font-size: 0.78rem;
+    padding: 0.35rem 0.65rem;
+  }
+
+  /* Quiz cards */
+  .quiz-question-card {
+    padding: 1rem;
+  }
+  .quiz-option-btn {
+    font-size: 0.92rem;
+    padding: 0.75rem 1rem;
+  }
+
+  /* Empty placeholder — shorten minimum height */
+  .empty-result-placeholder {
+    min-height: 220px;
+    padding: 1.5rem;
+  }
+
+  /* Upload dropzone */
+  .upload-dropzone {
+    padding: 1.25rem;
+  }
+
+  /* Prevent any element from overflowing viewport width */
+  * {
+    max-width: 100%;
+  }
+  img, video, iframe {
+    width: 100%;
+    height: auto;
+  }
+}
+
+/* ---- Small phones (≤ 480px) ---- */
+@media (max-width: 480px) {
+
+  .app-container {
+    padding: 1rem 0.65rem;
+  }
+
+  .header h1 {
+    font-size: 1.4rem;
+  }
+  .header p {
+    font-size: 0.875rem;
+  }
+
+  /* Toolbar — even tighter, allow scrolling row if needed */
+  .accessibility-bar {
+    flex-wrap: wrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    gap: 0.4rem;
+    padding-bottom: 0.25rem;
+  }
+  .control-btn {
+    font-size: 0.72rem;
+    padding: 0.35rem 0.55rem;
+    white-space: nowrap;
+  }
+
+  .card {
+    padding: 1rem;
+    border-radius: var(--radius-sm);
+  }
+
+  .custom-textarea {
+    min-height: 130px;
+    font-size: 0.9rem;
+    padding: 0.85rem;
+  }
+
+  /* Feature grid — 1 col on very small screens (override the 640px 2-col rule) */
+  .feature-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .feature-option {
+    padding: 0.85rem;
+  }
+
+  .btn-generate {
+    font-size: 0.95rem;
+    padding: 0.75rem 1rem;
+    gap: 0.5rem;
+  }
+
+  .output-title {
+    font-size: 1.1rem;
+  }
+
+  .quiz-score-title {
+    font-size: 1.2rem;
+  }
+
+  .quiz-score-desc {
+    font-size: 0.95rem;
+  }
+
+  .empty-result-placeholder {
+    min-height: 180px;
+    padding: 1rem;
+  }
+  .empty-result-icon {
+    font-size: 2.5rem;
+  }
+}
+

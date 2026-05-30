@@ -1,0 +1,233 @@
+Project Title: Accessible Learning Material Generator for Students with Dyslexia
+
+Project Overview:
+
+Build a modern AI-powered web application that helps students with dyslexia understand educational content more easily.
+
+The application should allow students to paste educational text and use AI to transform the content into a more accessible format.
+
+The AI model used will be Google Gemini API. The API key will be provided separately and should be stored securely using environment variables.
+
+Primary Goal:
+
+Students paste educational content from any subject such as Biology, Physics, Chemistry, Mathematics, Computer Science, History, Geography, Economics, Astrophysics, etc.
+
+The system should process the content using Gemini and generate dyslexia-friendly learning material.
+
+Phase 1 Features (Must Implement):
+
+1. Text Input
+
+Create a large text area where users can paste educational content.
+
+Placeholder:
+
+"Paste your chapter, notes, article, or study material here..."
+
+Minimum support:
+
+* 5000+ words
+* Multi-paragraph content
+* Long educational text
+
+2. AI Simplification
+
+Feature Name:
+Simplify Content
+
+When selected, send the text to Gemini and generate:
+
+* Simple English
+* Short sentences
+* Easy vocabulary
+* Dyslexia-friendly structure
+* Bullet points
+* Easy reading format
+
+Output should be displayed in a clean card layout.
+
+3. AI Summary
+
+Feature Name:
+Generate Summary
+
+Generate:
+
+* 5 to 10 concise bullet points
+* Student-friendly language
+* Quick revision format
+
+Display inside a summary card.
+
+4. Important Points Extraction
+
+Feature Name:
+Important Points
+
+Generate:
+
+* Key concepts
+* Exam revision points
+* Highlight critical information
+
+Display as a list with visual emphasis.
+
+5. Quiz Generation
+
+Feature Name:
+Generate Quiz
+
+Generate:
+
+* 5 multiple-choice questions
+* 4 options per question
+* Correct answer shown
+* Educational format
+
+Display in quiz cards.
+
+User Flow:
+
+User opens website
+↓
+Paste educational content
+↓
+Select one feature:
+
+* Simplify Content
+* Generate Summary
+* Important Points
+* Generate Quiz
+  ↓
+  Click Generate
+  ↓
+  Show loading indicator
+  ↓
+  Call Gemini API
+  ↓
+  Display AI-generated result
+
+AI Prompt Requirements:
+
+For Simplification:
+
+"You are an educational assistant for students with dyslexia. Rewrite the content using simple English, short sentences, bullet points, and easy-to-understand language."
+
+For Summary:
+
+"Generate a concise student-friendly summary in bullet points."
+
+For Important Points:
+
+"Extract the most important concepts and revision points from the content."
+
+For Quiz:
+
+"Generate 5 MCQs with 4 options each and provide the correct answer."
+
+UI Requirements:
+
+Design Style:
+
+* Modern
+* Clean
+* Accessibility-focused
+* Student-friendly
+
+Color Palette:
+
+* Soft blue
+* White
+* Light background
+
+Layout:
+
+Header:
+Accessible Learning Material Generator
+
+Subtitle:
+AI-Powered Learning Support for Students with Dyslexia
+
+Main Section:
+Large text input box
+
+Feature Selection:
+
+* Simplify Content
+* Generate Summary
+* Important Points
+* Generate Quiz
+
+Generate Button
+
+Results Section
+
+Loading State:
+Show spinner and message:
+"Generating learning material..."
+
+Error Handling:
+
+If input is empty:
+Show:
+"Please enter educational content."
+
+If API fails:
+Show:
+"Unable to generate response. Please try again."
+
+Technical Requirements:
+
+Frontend:
+React + TypeScript
+
+Backend:
+Serverless API route or backend integration
+
+AI:
+Google Gemini API
+
+Store API key using environment variables.
+
+Do not hardcode API keys.
+
+Project Structure:
+
+Home Page
+
+Components:
+
+* TextInput
+* FeatureSelector
+* GenerateButton
+* OutputCard
+* LoadingSpinner
+
+Responsive Design:
+
+* Desktop
+* Tablet
+* Mobile
+
+Important Constraint:
+
+This is Phase 1 only.
+
+Do NOT build:
+
+* PDF Upload
+* OCR
+* Authentication
+* Database
+* User Accounts
+* Payment Features
+
+Focus entirely on:
+
+* Text Input
+* Simplification
+* Summary
+* Important Points
+* Quiz Generation
+
+The application should be production-quality, responsive, clean, and ready for a GenAI hackathon demonstration.

@@ -19,6 +19,14 @@ export async function POST(request: Request) {
 
     if (filename.endsWith('.pdf')) {
       try {
+        // Polyfill DOMMatrix and Path2D for Vercel Node environments
+        if (typeof globalThis.DOMMatrix === 'undefined') {
+          (globalThis as any).DOMMatrix = class DOMMatrix {};
+        }
+        if (typeof globalThis.Path2D === 'undefined') {
+          (globalThis as any).Path2D = class Path2D {};
+        }
+
         // Dynamically require inside the function so Vercel doesn't crash on startup
         const { PDFParse } = require('pdf-parse');
         

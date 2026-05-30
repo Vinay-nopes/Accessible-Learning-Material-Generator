@@ -44,7 +44,15 @@ export default function DocumentUpload({
         body: formData,
       });
 
-      const data = await response.json();
+      const textResponse = await response.text();
+      let data;
+      try {
+        data = JSON.parse(textResponse);
+      } catch (parseErr) {
+        // If it's not JSON, it's likely an HTML error page from the hosting provider (e.g. 500, 413)
+        console.error('Non-JSON response from server:', textResponse.substring(0, 200));
+        throw new Error(`Server returned an error (${response.status}). The file might be too large or the server encountered an issue.`);
+      }
 
       if (!response.ok) {
         throw new Error(data.error || 'Document processing failed. Please try another file.');

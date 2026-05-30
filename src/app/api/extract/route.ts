@@ -1,17 +1,6 @@
 import { NextResponse } from 'next/server';
-import { PDFParse } from 'pdf-parse';
-import mammoth from 'mammoth';
 import { pathToFileURL } from 'url';
 import path from 'path';
-
-// Resolve and configure the PDFJS worker path using process.cwd() to prevent Turbopack bundle resolution issues
-try {
-  const workerPath = path.join(process.cwd(), 'node_modules', 'pdfjs-dist', 'legacy', 'build', 'pdf.worker.mjs');
-  const workerUrl = pathToFileURL(workerPath).toString();
-  PDFParse.setWorker(workerUrl);
-} catch (workerErr) {
-  console.error('Failed to configure PDFParse worker:', workerErr);
-}
 
 export async function POST(request: Request) {
   try {
@@ -30,20 +19,33 @@ export async function POST(request: Request) {
 
     if (filename.endsWith('.pdf')) {
       try {
+        // Dynamically require inside the function so Vercel doesn't crash on startup
+        const { PDFParse } = require('pdf-parse');
+        
+        // Configure worker securely
+        try {
+          const workerPath = path.join(process.cwd(), 'node_modules', 'pdfjs-dist', 'legacy', 'build', 'pdf.worker.mjs');
+          const workerUrl = pathToFileURL(workerPath).toString();
+          PDFParse.setWorker(workerUrl);
+        } catch (e) {
+          // ignore worker setup errors in production
+        }
+
         const parser = new PDFParse({ data: buffer });
         const result = await parser.getText();
         extractedText = result.text;
-      } catch (pdfErr) {
+      } catch (pdfErr: any) {
         console.error('PDF extraction error details:', pdfErr);
-        return NextResponse.json({ error: 'Unable to extract text from this document.' }, { status: 422 });
+        return NextResponse.json({ error: `Unable to extract PDF: ${pdfErr.message || 'Unknown error'}` }, { status: 422 });
       }
     } else if (filename.endsWith('.docx')) {
       try {
+        const mammoth = require('mammoth');
         const result = await mammoth.extractRawText({ buffer });
         extractedText = result.value;
-      } catch (docxErr) {
+      } catch (docxErr: any) {
         console.error('DOCX extraction error details:', docxErr);
-        return NextResponse.json({ error: 'Unable to extract text from this document.' }, { status: 422 });
+        return NextResponse.json({ error: `Unable to extract DOCX: ${docxErr.message || 'Unknown error'}` }, { status: 422 });
       }
     } else {
       return NextResponse.json({ error: 'Only PDF and DOCX files are supported.' }, { status: 400 });

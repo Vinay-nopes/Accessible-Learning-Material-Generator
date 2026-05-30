@@ -37,6 +37,7 @@ export async function POST(request: Request) {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            'Bypass-Tunnel-Reminder': 'true'
           },
           body: JSON.stringify({ text }),
         });
